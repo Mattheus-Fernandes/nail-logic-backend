@@ -5,10 +5,10 @@ import com.customer_service.customerservice.business.record.in.CustomerCreateReq
 import com.customer_service.customerservice.business.record.out.CustomerResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/customers")
@@ -22,5 +22,45 @@ public class CustomerController {
             @RequestBody CustomerCreateRequest request
     ){
         return ResponseEntity.ok(customerService.addCustomer(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CustomerResponse>> findAllCustomers() {
+        return ResponseEntity.ok(customerService.findAllCustomers());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerResponse> findById(
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(customerService.findById(id));
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<List<CustomerResponse>> findByName(
+            @RequestParam String name
+    ) {
+        return ResponseEntity.ok(customerService.findByName(name));
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<CustomerResponse> findByEmail(
+            @RequestParam String email
+    ) {
+        return ResponseEntity.ok(customerService.findByEmail(email));
+    }
+
+    @GetMapping("/phone")
+    public ResponseEntity<CustomerResponse> findByPhone(
+            @RequestParam String phone
+    ) {
+        return ResponseEntity.ok(customerService.findByPhone(phone));
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<CustomerResponse>> findByActive(
+            @RequestParam boolean active
+    ) {
+        return ResponseEntity.ok((customerService.findByActive(active)));
     }
 }
