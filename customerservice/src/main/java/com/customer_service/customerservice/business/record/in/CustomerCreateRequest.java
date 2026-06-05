@@ -1,4 +1,4 @@
-package com.customer_service.customerservice.infrastructure.business.record.in;
+package com.customer_service.customerservice.business.record.in;
 
 public record CustomerCreateRequest(
     String name,

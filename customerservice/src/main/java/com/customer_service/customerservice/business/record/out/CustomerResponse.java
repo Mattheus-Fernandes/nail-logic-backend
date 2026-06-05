@@ -1,4 +1,4 @@
-package com.customer_service.customerservice.infrastructure.business.record.out;
+package com.customer_service.customerservice.business.record.out;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

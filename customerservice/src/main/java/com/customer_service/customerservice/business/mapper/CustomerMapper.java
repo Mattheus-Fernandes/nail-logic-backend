@@ -1,7 +1,7 @@
-package com.customer_service.customerservice.infrastructure.business.mapper;
+package com.customer_service.customerservice.business.mapper;
 
-import com.customer_service.customerservice.infrastructure.business.record.in.*;
-import com.customer_service.customerservice.infrastructure.business.record.out.CustomerResponse;
+import com.customer_service.customerservice.business.record.in.*;
+import com.customer_service.customerservice.business.record.out.CustomerResponse;
 import com.customer_service.customerservice.infrastructure.entity.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
