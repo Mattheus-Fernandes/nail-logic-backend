@@ -75,4 +75,10 @@ public class CustomerService {
         return customerMapper.toResponse(customer);
     }
 
+    public List<CustomerResponse> findByActive(boolean active) {
+        List<Customer> customerList = customerRepository.findByActive(active);
+
+        return customerMapper.toResponseList(customerList);
+    }
+
 }
