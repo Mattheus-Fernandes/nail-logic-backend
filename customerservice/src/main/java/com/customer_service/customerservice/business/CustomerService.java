@@ -53,4 +53,10 @@ public class CustomerService {
         return customerMapper.toResponse(customer);
     }
 
+    public List<CustomerResponse> findByName(String name) {
+        List<Customer> customersList = customerRepository.findByNameContainingIgnoreCase(name);
+
+        return customerMapper.toResponseList(customersList);
+    }
+
 }
