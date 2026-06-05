@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -42,4 +43,14 @@ public class CustomerService {
 
         return customerMapper.toResponseList(customerList);
     }
+
+    public CustomerResponse findById(UUID id) {
+
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        return customerMapper.toResponse(customer);
+    }
+
 }
