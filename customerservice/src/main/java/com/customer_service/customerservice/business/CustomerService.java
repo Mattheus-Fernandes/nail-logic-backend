@@ -1,8 +1,8 @@
-package com.customer_service.customerservice.infrastructure.business;
+package com.customer_service.customerservice.business;
 
-import com.customer_service.customerservice.infrastructure.business.mapper.CustomerMapper;
-import com.customer_service.customerservice.infrastructure.business.record.in.CustomerCreateRequest;
-import com.customer_service.customerservice.infrastructure.business.record.out.CustomerResponse;
+import com.customer_service.customerservice.business.mapper.CustomerMapper;
+import com.customer_service.customerservice.business.record.in.CustomerCreateRequest;
+import com.customer_service.customerservice.business.record.out.CustomerResponse;
 import com.customer_service.customerservice.infrastructure.entity.Customer;
 import com.customer_service.customerservice.infrastructure.repository.CustomerRepository;
 import com.customer_service.customerservice.infrastructure.validators.CustomerValidator;

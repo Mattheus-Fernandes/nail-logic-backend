@@ -1,6 +1,6 @@
 package com.customer_service.customerservice.infrastructure.validators;
 
-import com.customer_service.customerservice.infrastructure.business.record.in.CustomerCreateRequest;
+import com.customer_service.customerservice.business.record.in.CustomerCreateRequest;
 import com.customer_service.customerservice.infrastructure.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
