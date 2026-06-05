@@ -9,6 +9,8 @@ import com.customer_service.customerservice.infrastructure.validators.CustomerVa
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
@@ -33,5 +35,11 @@ public class CustomerService {
 
         return customerMapper.toResponse(customerRepository.save(customer));
 
+    }
+
+    public List<CustomerResponse> findAllCustomers() {
+        List<Customer> customerList = customerRepository.findAll();
+
+        return customerMapper.toResponseList(customerList);
     }
 }
