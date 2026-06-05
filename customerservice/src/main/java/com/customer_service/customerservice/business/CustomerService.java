@@ -59,4 +59,12 @@ public class CustomerService {
         return customerMapper.toResponseList(customersList);
     }
 
+    public CustomerResponse findByEmail(String email) {
+        Customer customer = customerRepository.findByEmail(email).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        return customerMapper.toResponse(customer);
+    }
+
 }
