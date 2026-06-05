@@ -4,6 +4,7 @@ import com.customer_service.customerservice.infrastructure.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerRepository extends JpaRepository<Customer, UUID> {
@@ -13,4 +14,5 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     boolean existsByPhone(String phone);
 
     List<Customer> findByNameContainingIgnoreCase(String name);
+    Optional<Customer> findByEmail(String email);
 }
