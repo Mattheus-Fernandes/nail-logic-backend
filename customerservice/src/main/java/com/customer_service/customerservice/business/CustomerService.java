@@ -67,4 +67,12 @@ public class CustomerService {
         return customerMapper.toResponse(customer);
     }
 
+    public CustomerResponse findByPhone(String phone) {
+        Customer customer = customerRepository.findByPhone(phone).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        return customerMapper.toResponse(customer);
+    }
+
 }
