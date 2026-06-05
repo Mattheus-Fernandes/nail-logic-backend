@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -42,4 +43,42 @@ public class CustomerService {
 
         return customerMapper.toResponseList(customerList);
     }
+
+    public CustomerResponse findById(UUID id) {
+
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        return customerMapper.toResponse(customer);
+    }
+
+    public List<CustomerResponse> findByName(String name) {
+        List<Customer> customersList = customerRepository.findByNameContainingIgnoreCase(name);
+
+        return customerMapper.toResponseList(customersList);
+    }
+
+    public CustomerResponse findByEmail(String email) {
+        Customer customer = customerRepository.findByEmail(email).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        return customerMapper.toResponse(customer);
+    }
+
+    public CustomerResponse findByPhone(String phone) {
+        Customer customer = customerRepository.findByPhone(phone).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        return customerMapper.toResponse(customer);
+    }
+
+    public List<CustomerResponse> findByActive(boolean active) {
+        List<Customer> customerList = customerRepository.findByActive(active);
+
+        return customerMapper.toResponseList(customerList);
+    }
+
 }
