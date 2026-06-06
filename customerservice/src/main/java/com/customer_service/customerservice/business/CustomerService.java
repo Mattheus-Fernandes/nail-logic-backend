@@ -2,6 +2,8 @@ package com.customer_service.customerservice.business;
 
 import com.customer_service.customerservice.business.mapper.CustomerMapper;
 import com.customer_service.customerservice.business.record.in.CustomerCreateRequest;
+import com.customer_service.customerservice.business.record.in.CustomerUpdateActiveRequest;
+import com.customer_service.customerservice.business.record.in.CustomerUpdateRequest;
 import com.customer_service.customerservice.business.record.out.CustomerResponse;
 import com.customer_service.customerservice.infrastructure.entity.Customer;
 import com.customer_service.customerservice.infrastructure.repository.CustomerRepository;
@@ -79,6 +81,42 @@ public class CustomerService {
         List<Customer> customerList = customerRepository.findByActive(active);
 
         return customerMapper.toResponseList(customerList);
+    }
+
+    public CustomerResponse editCustomer(UUID id, CustomerUpdateRequest request) {
+
+        CustomerUpdateRequest data = new CustomerUpdateRequest(
+                request.name(),
+                request.lastname(),
+                request.email(),
+                request.phone(),
+                request.observation(),
+                request.active()
+        );
+
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        Customer edit = customerMapper.updateEntity(data, customer);
+
+        return customerMapper.toResponse(customerRepository.save(edit));
+
+    }
+
+    public CustomerResponse editActiveCustomer(UUID id, CustomerUpdateActiveRequest request) {
+
+        CustomerUpdateActiveRequest data = new CustomerUpdateActiveRequest(
+                request.active()
+        );
+
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        Customer edit = customerMapper.updateActive(data, customer);
+
+        return customerMapper.toResponse(customerRepository.save(edit));
     }
 
 }
