@@ -2,6 +2,7 @@ package com.customer_service.customerservice.business;
 
 import com.customer_service.customerservice.business.mapper.CustomerMapper;
 import com.customer_service.customerservice.business.record.in.CustomerCreateRequest;
+import com.customer_service.customerservice.business.record.in.CustomerUpdateActiveRequest;
 import com.customer_service.customerservice.business.record.in.CustomerUpdateRequest;
 import com.customer_service.customerservice.business.record.out.CustomerResponse;
 import com.customer_service.customerservice.infrastructure.entity.Customer;
@@ -101,6 +102,21 @@ public class CustomerService {
 
         return customerMapper.toResponse(customerRepository.save(edit));
 
+    }
+
+    public CustomerResponse editActiveCustomer(UUID id, CustomerUpdateActiveRequest request) {
+
+        CustomerUpdateActiveRequest data = new CustomerUpdateActiveRequest(
+                request.active()
+        );
+
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        Customer edit = customerMapper.updateActive(data, customer);
+
+        return customerMapper.toResponse(customerRepository.save(edit));
     }
 
 }
