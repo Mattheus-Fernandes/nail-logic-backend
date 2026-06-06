@@ -5,10 +5,11 @@ import com.customer_service.customerservice.business.record.out.CustomerResponse
 import com.customer_service.customerservice.infrastructure.entity.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CustomerMapper {
     Customer toEntity(CustomerCreateRequest request);
 
@@ -16,22 +17,12 @@ public interface CustomerMapper {
 
     List<CustomerResponse> toResponseList(List<Customer> customers);
 
-    void updateEntity(
+    Customer updateEntity(
             CustomerUpdateRequest request,
             @MappingTarget Customer customer
     );
 
-    void updateEmail(
-            CustomerUpdateEmailRequest request,
-            @MappingTarget Customer customer
-    );
-
-    void updatePhone(
-            CustomerUpdatePhoneRequest request,
-            @MappingTarget Customer customer
-    );
-
-    void updateActive(
+    Customer updateActive(
             CustomerUpdateActiveRequest request,
             @MappingTarget Customer customer
     );
