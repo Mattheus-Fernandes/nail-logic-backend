@@ -82,4 +82,11 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.editActiveCustomer(id, request));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CustomerResponse> deleteCustomer(
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(customerService.deleteCustomer(id));
+    }
+
 }
