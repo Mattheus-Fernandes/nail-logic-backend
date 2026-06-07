@@ -8,5 +8,5 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
-    boolean existByAppointmentDateAndAppointTime(LocalDate appointmentDate, LocalTime appointmentTime);
+    boolean existsByAppointmentDateAndAppointmentTime(LocalDate appointmentDate, LocalTime appointmentTime);
 }
