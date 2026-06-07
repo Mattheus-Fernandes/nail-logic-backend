@@ -30,7 +30,7 @@ public class AppointmentValidator {
 
     private void validateDateAndTime(AppointmentCreateRequest request) {
 
-        boolean exist = appointmentRepository.existByAppointmentDateAndAppointTime(
+        boolean exist = appointmentRepository.existsByAppointmentDateAndAppointmentTime(
                 request.appointmentDate(), request.appointmentTime()
         );
 
