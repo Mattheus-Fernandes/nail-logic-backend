@@ -2,6 +2,7 @@ package com.customer_service.customerservice.controller;
 
 import com.customer_service.customerservice.business.CustomerService;
 import com.customer_service.customerservice.business.record.in.CustomerCreateRequest;
+import com.customer_service.customerservice.business.record.in.CustomerUpdateActiveRequest;
 import com.customer_service.customerservice.business.record.in.CustomerUpdateRequest;
 import com.customer_service.customerservice.business.record.out.CustomerResponse;
 import lombok.RequiredArgsConstructor;
@@ -72,4 +73,13 @@ public class CustomerController {
     ) {
         return ResponseEntity.ok(customerService.editCustomer(id, request));
     }
+
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<CustomerResponse> editActiveCustomer(
+            @PathVariable UUID id,
+            @RequestBody CustomerUpdateActiveRequest request
+    ) {
+        return ResponseEntity.ok(customerService.editActiveCustomer(id, request));
+    }
+
 }
