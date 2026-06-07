@@ -119,4 +119,15 @@ public class CustomerService {
         return customerMapper.toResponse(customerRepository.save(edit));
     }
 
+    public CustomerResponse deleteCustomer(UUID id) {
+
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Cliente não encontrada")
+        );
+
+        customerRepository.deleteById(id);
+
+        return customerMapper.toResponse(customer);
+    }
+
 }
