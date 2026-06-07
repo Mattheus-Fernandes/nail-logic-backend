@@ -2,6 +2,7 @@ package com.customer_service.customerservice.controller;
 
 import com.customer_service.customerservice.business.CustomerService;
 import com.customer_service.customerservice.business.record.in.CustomerCreateRequest;
+import com.customer_service.customerservice.business.record.in.CustomerUpdateRequest;
 import com.customer_service.customerservice.business.record.out.CustomerResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +63,13 @@ public class CustomerController {
             @RequestParam boolean active
     ) {
         return ResponseEntity.ok((customerService.findByActive(active)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerResponse> editCustomer(
+            @PathVariable UUID id,
+            @RequestBody CustomerUpdateRequest request
+    ) {
+        return ResponseEntity.ok(customerService.editCustomer(id, request));
     }
 }
