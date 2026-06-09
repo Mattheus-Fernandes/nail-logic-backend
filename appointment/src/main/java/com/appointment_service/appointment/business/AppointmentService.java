@@ -87,4 +87,15 @@ public class AppointmentService {
         return appointmentMapper.toResponseList(appointmentList);
     }
 
+    public AppointmentResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
+
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Agendamento não encontrado")
+        );
+
+        appointment.setStatus(status);
+
+        return appointmentMapper.toResponse(appointmentRepository.save(appointment));
+    }
+
 }
