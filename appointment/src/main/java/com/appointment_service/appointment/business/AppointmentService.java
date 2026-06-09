@@ -4,11 +4,16 @@ import com.appointment_service.appointment.business.mapper.AppointmentMapper;
 import com.appointment_service.appointment.business.record.in.AppointmentCreateRequest;
 import com.appointment_service.appointment.business.record.out.AppointmentResponse;
 import com.appointment_service.appointment.infrastructure.entity.Appointment;
+import com.appointment_service.appointment.infrastructure.enums.AppointmentStatus;
 import com.appointment_service.appointment.infrastructure.repository.AppointmentRepository;
 import com.appointment_service.appointment.infrastructure.validators.AppointmentValidator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,4 +32,59 @@ public class AppointmentService {
         return appointmentMapper.toResponse(appointmentRepository.save(appointment));
 
     }
+
+    public List<AppointmentResponse> findAllAppointments() {
+
+        List<Appointment> appointmentList = appointmentRepository.findAll();
+
+        return appointmentMapper.toResponseList(appointmentList);
+
+    }
+
+    public AppointmentResponse findAppointmentById(UUID id) {
+
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Agendamento não encontrado")
+        );
+
+        return appointmentMapper.toResponse(appointment);
+    }
+
+    public List<AppointmentResponse> findAppointmentsToday() {
+        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateAndStatus(LocalDate.now(), AppointmentStatus.CONFIRMED);
+
+        return appointmentMapper.toResponseList(appointmentList);
+
+    }
+
+    public List<AppointmentResponse> findAppointmentsConfirmed(int year, int month) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.CONFIRMED);
+
+
+        return appointmentMapper.toResponseList(appointmentList);
+    }
+
+    public List<AppointmentResponse> findAppointmentsCompleted(int year, int month) {
+
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.COMPLETED);
+
+        return appointmentMapper.toResponseList(appointmentList);
+    }
+
+    public List<AppointmentResponse> findAppointmentsCanceled(int year, int month) {
+
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.CANCELED);
+
+        return appointmentMapper.toResponseList(appointmentList);
+    }
+
 }
