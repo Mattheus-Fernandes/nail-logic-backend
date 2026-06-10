@@ -91,4 +91,13 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.deleteAppointment(id));
     }
 
+    @DeleteMapping("/customer/{customerId}")
+    public ResponseEntity<Void> deleteAllAppointmentsByCustomerId(
+            @PathVariable UUID customerId
+    ) {
+        appointmentService.deleteAllAppointmentsByCustomerId(customerId);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
