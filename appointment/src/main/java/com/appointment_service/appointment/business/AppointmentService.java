@@ -114,4 +114,14 @@ public class AppointmentService {
 
         return appointmentMapper.toResponse(appointmentRepository.save(appointment));
     }
+
+    public AppointmentResponse deleteAppointment(UUID id) {
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Agendamento não encontrado")
+        );
+
+        appointmentRepository.deleteById(id);
+
+        return appointmentMapper.toResponse(appointment);
+    }
 }
