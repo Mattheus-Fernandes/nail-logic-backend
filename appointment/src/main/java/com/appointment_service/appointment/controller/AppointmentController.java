@@ -84,4 +84,11 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.updateAppointmentStatus(id, request.status()));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<AppointmentResponse> deleteAppointment(
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(appointmentService.deleteAppointment(id));
+    }
+
 }
