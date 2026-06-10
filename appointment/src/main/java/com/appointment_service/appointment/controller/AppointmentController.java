@@ -2,6 +2,7 @@ package com.appointment_service.appointment.controller;
 
 import com.appointment_service.appointment.business.AppointmentService;
 import com.appointment_service.appointment.business.record.in.AppointmentCreateRequest;
+import com.appointment_service.appointment.business.record.in.AppointmentUpdateRequest;
 import com.appointment_service.appointment.business.record.in.AppointmentUpdateStatus;
 import com.appointment_service.appointment.business.record.out.AppointmentResponse;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,14 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.findAppointmentsCanceled(year, month));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<AppointmentResponse> updateAppointment (
+            @PathVariable UUID id,
+            @RequestBody AppointmentUpdateRequest request
+    ) {
+       return ResponseEntity.ok(appointmentService.updateAppointment(id, request));
+    }
+
     @PatchMapping("/{id}/status")
     public ResponseEntity<AppointmentResponse> updateAppointmentStatus(
             @PathVariable UUID id,
@@ -74,4 +83,5 @@ public class AppointmentController {
     ) {
         return ResponseEntity.ok(appointmentService.updateAppointmentStatus(id, request.status()));
     }
+
 }
