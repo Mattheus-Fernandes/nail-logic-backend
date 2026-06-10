@@ -14,4 +14,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     boolean existsByAppointmentDateAndAppointmentTimeAndIdNot(LocalDate appointmentDate, LocalTime appointmentTime, UUID id);
     List<Appointment> findByAppointmentDateBetweenAndStatus(LocalDate startDate, LocalDate endDate, AppointmentStatus status);
     List<Appointment> findByAppointmentDateAndStatus(LocalDate appointmentDate, AppointmentStatus status);
+    List<Appointment> findByCustomerId(UUID customerId);
+    void deleteAllByCustomerId(UUID customerId);
+
 }

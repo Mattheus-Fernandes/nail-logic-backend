@@ -124,4 +124,14 @@ public class AppointmentService {
 
         return appointmentMapper.toResponse(appointment);
     }
+
+    public void deleteAllAppointmentsByCustomerId(UUID customerId) {
+        List<Appointment> appointmentList = appointmentRepository.findByCustomerId(customerId);
+
+        if(appointmentList.isEmpty()) {
+            throw new RuntimeException("Nenhum agendamento encontrado");
+        }
+
+        appointmentRepository.deleteAllByCustomerId(customerId);
+    }
 }
