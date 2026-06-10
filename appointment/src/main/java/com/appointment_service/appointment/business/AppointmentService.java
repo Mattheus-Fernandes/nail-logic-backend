@@ -2,6 +2,7 @@ package com.appointment_service.appointment.business;
 
 import com.appointment_service.appointment.business.mapper.AppointmentMapper;
 import com.appointment_service.appointment.business.record.in.AppointmentCreateRequest;
+import com.appointment_service.appointment.business.record.in.AppointmentUpdateRequest;
 import com.appointment_service.appointment.business.record.out.AppointmentResponse;
 import com.appointment_service.appointment.infrastructure.entity.Appointment;
 import com.appointment_service.appointment.infrastructure.enums.AppointmentStatus;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -98,4 +100,18 @@ public class AppointmentService {
         return appointmentMapper.toResponse(appointmentRepository.save(appointment));
     }
 
+    public AppointmentResponse updateAppointment(UUID id, AppointmentUpdateRequest request) {
+
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Agendamento não encontrado")
+        );
+
+        appointmentMapper.updateFromRequest(request, appointment);
+
+        appointmentValidator.validateUpdate(appointment);
+
+        appointment.setUpdatedAt(LocalDateTime.now());
+
+        return appointmentMapper.toResponse(appointmentRepository.save(appointment));
+    }
 }
