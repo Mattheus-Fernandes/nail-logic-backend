@@ -9,6 +9,7 @@ import com.appointment_service.appointment.infrastructure.enums.AppointmentStatu
 import com.appointment_service.appointment.infrastructure.repository.AppointmentRepository;
 import com.appointment_service.appointment.infrastructure.validators.AppointmentValidator;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -125,6 +126,7 @@ public class AppointmentService {
         return appointmentMapper.toResponse(appointment);
     }
 
+    @Transactional
     public void deleteAllAppointmentsByCustomerId(UUID customerId) {
         List<Appointment> appointmentList = appointmentRepository.findByCustomerId(customerId);
 
