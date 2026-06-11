@@ -127,22 +127,26 @@ public class AppointmentService {
                 .toList();
     }
 
-    public AppointmentResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
+    public AppointmentDetailsResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
+
+        CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
 
         appointment.setStatus(status);
 
-        return appointmentMapper.toResponse(appointmentRepository.save(appointment));
+        return appointmentMapper.toDetailsResponse(appointment, customer);
     }
 
-    public AppointmentResponse updateAppointment(UUID id, AppointmentUpdateRequest request) {
+    public AppointmentDetailsResponse updateAppointment(UUID id, AppointmentUpdateRequest request) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
+
+        CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
 
         appointmentMapper.updateFromRequest(request, appointment);
 
@@ -150,17 +154,23 @@ public class AppointmentService {
 
         appointment.setUpdatedAt(LocalDateTime.now());
 
-        return appointmentMapper.toResponse(appointmentRepository.save(appointment));
+        return appointmentMapper.toDetailsResponse(appointment, customer);
+
     }
 
-    public AppointmentResponse deleteAppointment(UUID id) {
+    public AppointmentDetailsResponse deleteAppointment(UUID id) {
+
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
 
+        CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+
         appointmentRepository.deleteById(id);
 
-        return appointmentMapper.toResponse(appointment);
+        return appointmentMapper.toDetailsResponse(appointment, customer);
+
     }
 
     @Transactional

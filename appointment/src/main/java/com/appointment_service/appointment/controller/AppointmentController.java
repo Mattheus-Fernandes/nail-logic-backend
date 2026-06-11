@@ -70,7 +70,7 @@ public class AppointmentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AppointmentResponse> updateAppointment (
+    public ResponseEntity<AppointmentDetailsResponse> updateAppointment (
             @PathVariable UUID id,
             @RequestBody AppointmentUpdateRequest request
     ) {
@@ -78,7 +78,7 @@ public class AppointmentController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<AppointmentResponse> updateAppointmentStatus(
+    public ResponseEntity<AppointmentDetailsResponse> updateAppointmentStatus(
             @PathVariable UUID id,
             @RequestBody AppointmentUpdateStatus request
     ) {
@@ -86,7 +86,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<AppointmentResponse> deleteAppointment(
+    public ResponseEntity<AppointmentDetailsResponse> deleteAppointment(
             @PathVariable UUID id
     ) {
         return ResponseEntity.ok(appointmentService.deleteAppointment(id));
