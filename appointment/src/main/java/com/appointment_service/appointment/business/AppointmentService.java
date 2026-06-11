@@ -56,68 +56,97 @@ public class AppointmentService {
 
     }
 
-    public AppointmentResponse findAppointmentById(UUID id) {
+    public AppointmentDetailsResponse findAppointmentById(UUID id) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
 
-        return appointmentMapper.toResponse(appointment);
+        CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+        return appointmentMapper.toDetailsResponse(appointment, customer);
     }
 
-    public List<AppointmentResponse> findAppointmentsToday() {
+    public List<AppointmentDetailsResponse> findAppointmentsToday() {
         List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateAndStatus(LocalDate.now(), AppointmentStatus.CONFIRMED);
 
-        return appointmentMapper.toResponseList(appointmentList);
+        return appointmentList.stream()
+                .map(appointment -> {
+                    CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
 
+                    return appointmentMapper.toDetailsResponse(appointment, customer);
+                })
+                .toList();
     }
 
-    public List<AppointmentResponse> findAppointmentsConfirmed(int year, int month) {
+    public List<AppointmentDetailsResponse> findAppointmentsConfirmed(int year, int month) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
         List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.CONFIRMED);
 
+        return appointmentList.stream()
+                .map(appointment -> {
+                    CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
 
-        return appointmentMapper.toResponseList(appointmentList);
+                    return appointmentMapper.toDetailsResponse(appointment, customer);
+                })
+                .toList();
     }
 
-    public List<AppointmentResponse> findAppointmentsCompleted(int year, int month) {
+    public List<AppointmentDetailsResponse> findAppointmentsCompleted(int year, int month) {
 
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
         List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.COMPLETED);
 
-        return appointmentMapper.toResponseList(appointmentList);
+        return appointmentList.stream()
+                .map(appointment -> {
+                    CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+                    return appointmentMapper.toDetailsResponse(appointment, customer);
+                })
+                .toList();
+
     }
 
-    public List<AppointmentResponse> findAppointmentsCanceled(int year, int month) {
+    public List<AppointmentDetailsResponse> findAppointmentsCanceled(int year, int month) {
 
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
         List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.CANCELED);
 
-        return appointmentMapper.toResponseList(appointmentList);
+        return appointmentList.stream()
+                .map(appointment -> {
+                    CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+                    return appointmentMapper.toDetailsResponse(appointment, customer);
+                })
+                .toList();
     }
 
-    public AppointmentResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
+    public AppointmentDetailsResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
+
+        CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
 
         appointment.setStatus(status);
 
-        return appointmentMapper.toResponse(appointmentRepository.save(appointment));
+        return appointmentMapper.toDetailsResponse(appointment, customer);
     }
 
-    public AppointmentResponse updateAppointment(UUID id, AppointmentUpdateRequest request) {
+    public AppointmentDetailsResponse updateAppointment(UUID id, AppointmentUpdateRequest request) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
+
+        CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
 
         appointmentMapper.updateFromRequest(request, appointment);
 
@@ -125,17 +154,23 @@ public class AppointmentService {
 
         appointment.setUpdatedAt(LocalDateTime.now());
 
-        return appointmentMapper.toResponse(appointmentRepository.save(appointment));
+        return appointmentMapper.toDetailsResponse(appointment, customer);
+
     }
 
-    public AppointmentResponse deleteAppointment(UUID id) {
+    public AppointmentDetailsResponse deleteAppointment(UUID id) {
+
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
 
+        CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+
         appointmentRepository.deleteById(id);
 
-        return appointmentMapper.toResponse(appointment);
+        return appointmentMapper.toDetailsResponse(appointment, customer);
+
     }
 
     @Transactional

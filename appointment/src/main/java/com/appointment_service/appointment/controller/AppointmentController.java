@@ -34,19 +34,19 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppointmentResponse> findAppointmentById(
+    public ResponseEntity<AppointmentDetailsResponse> findAppointmentById(
             @PathVariable UUID id
     ) {
         return  ResponseEntity.ok(appointmentService.findAppointmentById(id));
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<AppointmentResponse>> findAppointmentsToday(){
+    public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsToday(){
         return ResponseEntity.ok(appointmentService.findAppointmentsToday());
     }
 
     @GetMapping("/confirmed")
-    public ResponseEntity<List<AppointmentResponse>> findAppointmentsConfirmed(
+    public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsConfirmed(
             @RequestParam int year,
             @RequestParam int month
     ){
@@ -54,7 +54,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/completed")
-    public ResponseEntity<List<AppointmentResponse>> findAppointmentsCompleted(
+    public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsCompleted(
             @RequestParam int year,
             @RequestParam int month
     ){
@@ -62,7 +62,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/canceled")
-    public ResponseEntity<List<AppointmentResponse>> findAppointmentsCanceled(
+    public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsCanceled(
             @RequestParam int year,
             @RequestParam int month
     ){
@@ -70,7 +70,7 @@ public class AppointmentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AppointmentResponse> updateAppointment (
+    public ResponseEntity<AppointmentDetailsResponse> updateAppointment (
             @PathVariable UUID id,
             @RequestBody AppointmentUpdateRequest request
     ) {
@@ -78,7 +78,7 @@ public class AppointmentController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<AppointmentResponse> updateAppointmentStatus(
+    public ResponseEntity<AppointmentDetailsResponse> updateAppointmentStatus(
             @PathVariable UUID id,
             @RequestBody AppointmentUpdateStatus request
     ) {
@@ -86,7 +86,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<AppointmentResponse> deleteAppointment(
+    public ResponseEntity<AppointmentDetailsResponse> deleteAppointment(
             @PathVariable UUID id
     ) {
         return ResponseEntity.ok(appointmentService.deleteAppointment(id));
