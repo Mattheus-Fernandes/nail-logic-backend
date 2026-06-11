@@ -1,6 +1,10 @@
 server:
   port: 9138
 
+customer:
+  service:
+    url: ${CUSTOMER_URL}
+
 spring:
   application:
     name: appointment
