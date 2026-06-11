@@ -3,7 +3,10 @@ package com.appointment_service.appointment.business;
 import com.appointment_service.appointment.business.mapper.AppointmentMapper;
 import com.appointment_service.appointment.business.record.in.AppointmentCreateRequest;
 import com.appointment_service.appointment.business.record.in.AppointmentUpdateRequest;
+import com.appointment_service.appointment.business.record.out.AppointmentDetailsResponse;
 import com.appointment_service.appointment.business.record.out.AppointmentResponse;
+import com.appointment_service.appointment.business.record.out.CustomerResponse;
+import com.appointment_service.appointment.infrastructure.client.CustomerClient;
 import com.appointment_service.appointment.infrastructure.entity.Appointment;
 import com.appointment_service.appointment.infrastructure.enums.AppointmentStatus;
 import com.appointment_service.appointment.infrastructure.repository.AppointmentRepository;
@@ -25,6 +28,7 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
     private final AppointmentValidator appointmentValidator;
+    private final CustomerClient customerClient;
 
     public AppointmentResponse addAppointment(AppointmentCreateRequest request) {
 
@@ -36,11 +40,19 @@ public class AppointmentService {
 
     }
 
-    public List<AppointmentResponse> findAllAppointments() {
+    public List<AppointmentDetailsResponse> findAllAppointments() {
 
         List<Appointment> appointmentList = appointmentRepository.findAll();
 
-        return appointmentMapper.toResponseList(appointmentList);
+        return appointmentList.stream()
+                .map(appointment -> {
+
+                    CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+                    return appointmentMapper.toDetailsResponse(appointment, customer);
+
+                })
+                .toList();
 
     }
 
