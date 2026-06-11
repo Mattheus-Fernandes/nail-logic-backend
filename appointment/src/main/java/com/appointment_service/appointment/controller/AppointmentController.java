@@ -4,6 +4,7 @@ import com.appointment_service.appointment.business.AppointmentService;
 import com.appointment_service.appointment.business.record.in.AppointmentCreateRequest;
 import com.appointment_service.appointment.business.record.in.AppointmentUpdateRequest;
 import com.appointment_service.appointment.business.record.in.AppointmentUpdateStatus;
+import com.appointment_service.appointment.business.record.out.AppointmentDetailsResponse;
 import com.appointment_service.appointment.business.record.out.AppointmentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AppointmentResponse>> findAllAppointments() {
+    public ResponseEntity<List<AppointmentDetailsResponse>> findAllAppointments() {
         return ResponseEntity.ok(appointmentService.findAllAppointments());
     }
 
