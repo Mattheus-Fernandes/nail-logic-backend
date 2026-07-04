@@ -29,12 +29,24 @@ public class AppointmentService {
     private final AppointmentMapper appointmentMapper;
     private final AppointmentValidator appointmentValidator;
     private final CustomerClient customerClient;
+    private final NotificationService notificationService;
 
     public AppointmentResponse addAppointment(AppointmentCreateRequest request) {
 
         appointmentValidator.validateCreate(request);
 
         Appointment appointment = appointmentMapper.toEntity(request);
+
+        CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+        notificationService.sendAppointmentCreated(
+                customer.name(),
+                customer.lastname(),
+                customer.phone(),
+                request.appointmentDate().toString(),
+                request.appointmentTime().toString(),
+                request.serviceName()
+        );
 
         return appointmentMapper.toResponse(appointmentRepository.save(appointment));
 
