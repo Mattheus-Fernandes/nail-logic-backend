@@ -74,6 +74,13 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.findAppointmentsReminds());
     }
 
+    @GetMapping("/phone/{phone}")
+    public ResponseEntity<AppointmentResponse> findAppointmentByCustomerIdAndDate(
+            @PathVariable String phone
+    ) {
+        return ResponseEntity.ok(appointmentService.findAppointmentByCustomerIdAndDate(phone));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<AppointmentDetailsResponse> updateAppointment (
             @PathVariable UUID id,
