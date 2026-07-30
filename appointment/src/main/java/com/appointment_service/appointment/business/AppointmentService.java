@@ -139,6 +139,23 @@ public class AppointmentService {
                 .toList();
     }
 
+    public List<AppointmentDetailsResponse> findAppointmentsReminds() {
+
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDate(tomorrow);
+
+        return appointmentList.stream()
+                .map(appointment -> {
+
+                    CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+                    return appointmentMapper.toDetailsResponse(appointment, customer);
+
+                })
+                .toList();
+    }
+
     public AppointmentDetailsResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
