@@ -24,7 +24,6 @@ public class NotificationService {
             String serviceName
     ){
         Map<String, Object> body = new HashMap<>();
-
         body.put("customerName", customerName);
         body.put("customerLastname", customerLastname);
         body.put("phone", phone);
