@@ -69,6 +69,11 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.findAppointmentsCanceled(year, month));
     }
 
+    @GetMapping("/reminds")
+    public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsReminds() {
+        return ResponseEntity.ok(appointmentService.findAppointmentsReminds());
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<AppointmentDetailsResponse> updateAppointment (
             @PathVariable UUID id,
