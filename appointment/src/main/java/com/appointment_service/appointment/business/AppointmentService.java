@@ -143,7 +143,7 @@ public class AppointmentService {
 
         LocalDate tomorrow = LocalDate.now().plusDays(1);
 
-        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDate(tomorrow);
+        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateAndStatus(tomorrow, AppointmentStatus.SCHEDULED);
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -156,6 +156,17 @@ public class AppointmentService {
                 .toList();
     }
 
+    public AppointmentResponse findAppointmentByCustomerIdAndDate(String phone) {
+
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        CustomerResponse customer =  customerClient.findByPhone(phone);
+
+        Appointment appointment = appointmentRepository.findByCustomerIdAndAppointmentDate(customer.id(), tomorrow);
+
+        return appointmentMapper.toResponse(appointment);
+    }
+
     public AppointmentDetailsResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
@@ -165,6 +176,8 @@ public class AppointmentService {
         CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
 
         appointment.setStatus(status);
+
+        appointmentRepository.save(appointment);
 
         return appointmentMapper.toDetailsResponse(appointment, customer);
     }
@@ -182,6 +195,8 @@ public class AppointmentService {
         appointmentValidator.validateUpdate(appointment);
 
         appointment.setUpdatedAt(LocalDateTime.now());
+
+        appointmentRepository.save(appointment);
 
         return appointmentMapper.toDetailsResponse(appointment, customer);
 

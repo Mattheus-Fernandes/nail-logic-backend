@@ -17,6 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/appointments")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -72,6 +73,13 @@ public class AppointmentController {
     @GetMapping("/reminds")
     public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsReminds() {
         return ResponseEntity.ok(appointmentService.findAppointmentsReminds());
+    }
+
+    @GetMapping("/phone/{phone}")
+    public ResponseEntity<AppointmentResponse> findAppointmentByCustomerIdAndDate(
+            @PathVariable String phone
+    ) {
+        return ResponseEntity.ok(appointmentService.findAppointmentByCustomerIdAndDate(phone));
     }
 
     @PatchMapping("/{id}")
