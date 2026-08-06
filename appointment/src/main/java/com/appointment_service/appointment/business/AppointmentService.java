@@ -143,7 +143,7 @@ public class AppointmentService {
 
         LocalDate tomorrow = LocalDate.now().plusDays(1);
 
-        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDate(tomorrow);
+        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateAndStatus(tomorrow, AppointmentStatus.SCHEDULED);
 
         return appointmentList.stream()
                 .map(appointment -> {
