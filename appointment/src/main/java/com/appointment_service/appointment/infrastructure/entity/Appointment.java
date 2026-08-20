@@ -1,6 +1,7 @@
 package com.appointment_service.appointment.infrastructure.entity;
 
 import com.appointment_service.appointment.infrastructure.enums.AppointmentStatus;
+import com.appointment_service.appointment.infrastructure.query.AppointmentQueries;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,48 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@NamedNativeQueries({
+        @NamedNativeQuery(
+               name = AppointmentQueries.FIND_ALL_APPOINTMENTS,
+               query = AppointmentQueries.FIND_ALL_APPOINTMENTS_QUERY,
+               resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FIND_APPOINTMENT_BY_ID,
+                query = AppointmentQueries.FIND_APPOINTMENT_BY_ID_QUERY,
+                resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FIND_ALL_APPOINTMENTS_REMINDS,
+                query = AppointmentQueries.FIND_ALL_APPOINTMENTS_REMINDS_QUERY,
+                resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FIND_APPOINTMENT_BY_CUSTOMER_ID,
+                query = AppointmentQueries.FIND_APPOINTMENT_BY_CUSTOMER_ID_QUERY,
+                resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FIND_ALL_APPOINTMENTS_TODAY,
+                query = AppointmentQueries.FIND_ALL_APPOINTMENTS_TODAY_QUERY,
+                resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FIND_ALL_APPOINTMENTS_CONFIRMED,
+                query = AppointmentQueries.FIND_ALL_APPOINTMENTS_CONFIRMED_QUERY,
+                resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FIND_ALL_APPOINTMENTS_COMPLETED,
+                query = AppointmentQueries.FIND_ALL_APPOINTMENTS_COMPLETED_QUERY,
+                resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FIND_ALL_APPOINTMENTS_CANCELED,
+                query = AppointmentQueries.FIND_ALL_APPOINTMENTS_CANCELED_QUERY,
+                resultClass = Appointment.class
+        )
+})
 public class Appointment {
 
     @Id
