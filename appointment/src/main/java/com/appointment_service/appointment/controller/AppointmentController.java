@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,26 +49,23 @@ public class AppointmentController {
 
     @GetMapping("/confirmed")
     public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsConfirmed(
-            @RequestParam int year,
-            @RequestParam int month
+            @RequestParam LocalDate date
     ){
-        return ResponseEntity.ok(appointmentService.findAppointmentsConfirmed(year, month));
+        return ResponseEntity.ok(appointmentService.findAppointmentsConfirmed(date));
     }
 
     @GetMapping("/completed")
     public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsCompleted(
-            @RequestParam int year,
-            @RequestParam int month
-    ){
-        return ResponseEntity.ok(appointmentService.findAppointmentsCompleted(year, month));
+            @RequestParam LocalDate date
+            ){
+        return ResponseEntity.ok(appointmentService.findAppointmentsCompleted(date));
     }
 
     @GetMapping("/canceled")
     public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsCanceled(
-            @RequestParam int year,
-            @RequestParam int month
+            @RequestParam LocalDate date
     ){
-        return ResponseEntity.ok(appointmentService.findAppointmentsCanceled(year, month));
+        return ResponseEntity.ok(appointmentService.findAppointmentsCanceled(date));
     }
 
     @GetMapping("/reminds")
@@ -76,10 +74,10 @@ public class AppointmentController {
     }
 
     @GetMapping("/phone/{phone}")
-    public ResponseEntity<AppointmentResponse> findAppointmentByCustomerIdAndDate(
+    public ResponseEntity<AppointmentDetailsResponse> findAppointmentByCustomerPhone(
             @PathVariable String phone
     ) {
-        return ResponseEntity.ok(appointmentService.findAppointmentByCustomerIdAndDate(phone));
+        return ResponseEntity.ok(appointmentService.findAppointmentByCustomerPhone(phone));
     }
 
     @PatchMapping("/{id}")
