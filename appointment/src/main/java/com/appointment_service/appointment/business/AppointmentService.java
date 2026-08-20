@@ -6,6 +6,7 @@ import com.appointment_service.appointment.business.record.in.AppointmentUpdateR
 import com.appointment_service.appointment.business.record.out.AppointmentDetailsResponse;
 import com.appointment_service.appointment.business.record.out.AppointmentResponse;
 import com.appointment_service.appointment.business.record.out.CustomerResponse;
+import com.appointment_service.appointment.infrastructure.DAO.AppointmentDAO;
 import com.appointment_service.appointment.infrastructure.client.CustomerClient;
 import com.appointment_service.appointment.infrastructure.entity.Appointment;
 import com.appointment_service.appointment.infrastructure.enums.AppointmentStatus;
@@ -26,6 +27,7 @@ import java.util.UUID;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
+    private final AppointmentDAO appointmentDAO;
     private final AppointmentMapper appointmentMapper;
     private final AppointmentValidator appointmentValidator;
     private final CustomerClient customerClient;
@@ -39,6 +41,7 @@ public class AppointmentService {
 
         CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
 
+        /*
         notificationService.sendAppointmentCreated(
                 customer.name(),
                 customer.lastname(),
@@ -46,7 +49,7 @@ public class AppointmentService {
                 request.appointmentDate().toString(),
                 request.appointmentTime().toString(),
                 request.serviceName()
-        );
+        ); */
 
         return appointmentMapper.toResponse(appointmentRepository.save(appointment));
 
@@ -54,9 +57,9 @@ public class AppointmentService {
 
     public List<AppointmentDetailsResponse> findAllAppointments() {
 
-        List<Appointment> appointmentList = appointmentRepository.findAll();
+        List<Appointment> appointmentsList = appointmentDAO.findAll();
 
-        return appointmentList.stream()
+        return appointmentsList.stream()
                 .map(appointment -> {
 
                     CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
@@ -65,12 +68,11 @@ public class AppointmentService {
 
                 })
                 .toList();
-
     }
 
     public AppointmentDetailsResponse findAppointmentById(UUID id) {
 
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(
+        Appointment appointment = appointmentDAO.findAppointmentById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
 
@@ -80,7 +82,7 @@ public class AppointmentService {
     }
 
     public List<AppointmentDetailsResponse> findAppointmentsToday() {
-        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateAndStatus(LocalDate.now(), AppointmentStatus.CONFIRMED);
+        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsToday(LocalDate.now());
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -91,11 +93,11 @@ public class AppointmentService {
                 .toList();
     }
 
-    public List<AppointmentDetailsResponse> findAppointmentsConfirmed(int year, int month) {
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+    public List<AppointmentDetailsResponse> findAppointmentsConfirmed(LocalDate date) {
+        LocalDate startDate = date.withDayOfMonth(1);
+        LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
 
-        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.CONFIRMED);
+        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsConfirmed(startDate, endDate);
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -106,12 +108,11 @@ public class AppointmentService {
                 .toList();
     }
 
-    public List<AppointmentDetailsResponse> findAppointmentsCompleted(int year, int month) {
+    public List<AppointmentDetailsResponse> findAppointmentsCompleted(LocalDate date) {
+        LocalDate startDate = date.withDayOfMonth(1);
+        LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
 
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-
-        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.COMPLETED);
+        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsCompleted(startDate, endDate);
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -120,15 +121,13 @@ public class AppointmentService {
                     return appointmentMapper.toDetailsResponse(appointment, customer);
                 })
                 .toList();
-
     }
 
-    public List<AppointmentDetailsResponse> findAppointmentsCanceled(int year, int month) {
+    public List<AppointmentDetailsResponse> findAppointmentsCanceled(LocalDate date) {
+        LocalDate startDate = date.withDayOfMonth(1);
+        LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
 
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-
-        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateBetweenAndStatus(startDate, endDate, AppointmentStatus.CANCELED);
+        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsCanceled(startDate, endDate);
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -141,9 +140,9 @@ public class AppointmentService {
 
     public List<AppointmentDetailsResponse> findAppointmentsReminds() {
 
-        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        LocalDate tomorrowDate = LocalDate.now().plusDays(1);
 
-        List<Appointment> appointmentList = appointmentRepository.findByAppointmentDateAndStatus(tomorrow, AppointmentStatus.SCHEDULED);
+        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsReminds(tomorrowDate);
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -156,15 +155,15 @@ public class AppointmentService {
                 .toList();
     }
 
-    public AppointmentResponse findAppointmentByCustomerIdAndDate(String phone) {
-
-        LocalDate tomorrow = LocalDate.now().plusDays(1);
-
+    public AppointmentDetailsResponse findAppointmentByCustomerPhone(String phone) {
         CustomerResponse customer =  customerClient.findByPhone(phone);
 
-        Appointment appointment = appointmentRepository.findByCustomerIdAndAppointmentDate(customer.id(), tomorrow);
+        Appointment appointment = appointmentDAO.findAppointmentByCustomerId(customer.id()).orElseThrow(
+                () -> new RuntimeException("Agendamento não encontrado")
 
-        return appointmentMapper.toResponse(appointment);
+        );
+
+        return appointmentMapper.toDetailsResponse(appointment, customer);
     }
 
     public AppointmentDetailsResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
