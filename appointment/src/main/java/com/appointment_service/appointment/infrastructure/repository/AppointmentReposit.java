@@ -44,4 +44,8 @@ public class AppointmentReposit {
     public List<Appointment> filterAppointmentByMonth(LocalDate startAppointmentDate, LocalDate endAppointmentDate) {
         return this.appointmentDAO.filterAppointmentByMonth(startAppointmentDate, endAppointmentDate);
     }
+
+    public List<Appointment> filterAppointmentsByCustomerId(UUID customerId) {
+        return this.appointmentDAO.filterAppointmentByCustomerId(customerId);
+    }
 }
