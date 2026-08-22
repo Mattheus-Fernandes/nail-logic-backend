@@ -40,4 +40,8 @@ public class AppointmentReposit {
     public List<Appointment> findAllAppointmentsByStatus(AppointmentStatus status, LocalDate startAppointmentDate, LocalDate endAppointmentDate) {
         return this.appointmentDAO.findAllAppointmentsByStatus(status, startAppointmentDate, endAppointmentDate);
     }
+
+    public List<Appointment> filterAppointmentByMonth(LocalDate startAppointmentDate, LocalDate endAppointmentDate) {
+        return this.appointmentDAO.filterAppointmentByMonth(startAppointmentDate, endAppointmentDate);
+    }
 }

@@ -80,6 +80,13 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.findAppointmentByCustomerPhone(phone));
     }
 
+    @GetMapping("/month")
+    public ResponseEntity<List<AppointmentDetailsResponse>> findAppointmentsByMonth(
+            @RequestParam LocalDate date
+    ){
+        return ResponseEntity.ok(appointmentService.findAppointmentByMonth(date));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<AppointmentDetailsResponse> updateAppointment (
             @PathVariable UUID id,

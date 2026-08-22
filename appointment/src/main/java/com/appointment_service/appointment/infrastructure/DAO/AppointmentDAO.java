@@ -18,7 +18,7 @@ import java.util.UUID;
 public class AppointmentDAO {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public List<Appointment> findAll() {
         return entityManager
@@ -84,5 +84,13 @@ public class AppointmentDAO {
             default:
                 throw new RuntimeException("Status desconhecido " + status);
         }
+    }
+
+    public List<Appointment> filterAppointmentByMonth( LocalDate startAppointmentDate, LocalDate endAppointmentDate) {
+        return entityManager
+                .createNamedQuery(AppointmentQueries.FILTER_APPOINTMENTS_BY_MONTH, Appointment.class)
+                .setParameter("start_appointment_date", startAppointmentDate)
+                .setParameter("end_appointment_date", endAppointmentDate)
+                .getResultList();
     }
 }
