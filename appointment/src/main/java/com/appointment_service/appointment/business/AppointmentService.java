@@ -175,6 +175,17 @@ public class AppointmentService {
                 .toList();
     }
 
+    public List<AppointmentDetailsResponse> findAllAppointmentsByName(String name) {
+        List<CustomerResponse> customer = customerClient.findByName(name);
+
+        List<Appointment> appointmentList = appointmentReposit.filterAppointmentsByCustomerId(customer.get(0).id());
+
+        return appointmentList.stream()
+                .map(appointment -> appointmentMapper.toDetailsResponse(appointment, customer.get(0)))
+                .toList();
+
+    }
+
     public AppointmentDetailsResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
