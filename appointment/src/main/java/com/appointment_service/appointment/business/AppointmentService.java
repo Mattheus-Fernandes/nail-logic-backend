@@ -3,13 +3,14 @@ package com.appointment_service.appointment.business;
 import com.appointment_service.appointment.business.mapper.AppointmentMapper;
 import com.appointment_service.appointment.business.record.in.AppointmentCreateRequest;
 import com.appointment_service.appointment.business.record.in.AppointmentUpdateRequest;
+import com.appointment_service.appointment.business.record.in.MonthPeriod;
 import com.appointment_service.appointment.business.record.out.AppointmentDetailsResponse;
 import com.appointment_service.appointment.business.record.out.AppointmentResponse;
 import com.appointment_service.appointment.business.record.out.CustomerResponse;
-import com.appointment_service.appointment.infrastructure.DAO.AppointmentDAO;
 import com.appointment_service.appointment.infrastructure.client.CustomerClient;
 import com.appointment_service.appointment.infrastructure.entity.Appointment;
 import com.appointment_service.appointment.infrastructure.enums.AppointmentStatus;
+import com.appointment_service.appointment.infrastructure.repository.AppointmentReposit;
 import com.appointment_service.appointment.infrastructure.repository.AppointmentRepository;
 import com.appointment_service.appointment.infrastructure.validators.AppointmentValidator;
 
@@ -27,11 +28,11 @@ import java.util.UUID;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-    private final AppointmentDAO appointmentDAO;
     private final AppointmentMapper appointmentMapper;
     private final AppointmentValidator appointmentValidator;
     private final CustomerClient customerClient;
     private final NotificationService notificationService;
+    private final AppointmentReposit appointmentReposit;
 
     public AppointmentResponse addAppointment(AppointmentCreateRequest request) {
 
@@ -57,7 +58,7 @@ public class AppointmentService {
 
     public List<AppointmentDetailsResponse> findAllAppointments() {
 
-        List<Appointment> appointmentsList = appointmentDAO.findAll();
+        List<Appointment> appointmentsList = appointmentReposit.findAllAppointments();
 
         return appointmentsList.stream()
                 .map(appointment -> {
@@ -72,7 +73,7 @@ public class AppointmentService {
 
     public AppointmentDetailsResponse findAppointmentById(UUID id) {
 
-        Appointment appointment = appointmentDAO.findAppointmentById(id).orElseThrow(
+        Appointment appointment = appointmentReposit.findAppointmentById(id).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
         );
 
@@ -82,7 +83,7 @@ public class AppointmentService {
     }
 
     public List<AppointmentDetailsResponse> findAppointmentsToday() {
-        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsToday(LocalDate.now());
+        List<Appointment> appointmentList = appointmentReposit.findAllAppointmentsToday(LocalDate.now());
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -94,10 +95,8 @@ public class AppointmentService {
     }
 
     public List<AppointmentDetailsResponse> findAppointmentsConfirmed(LocalDate date) {
-        LocalDate startDate = date.withDayOfMonth(1);
-        LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-
-        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsConfirmed(startDate, endDate);
+        MonthPeriod monthPeriod = getMonthPeriod(date);
+        List<Appointment> appointmentList = appointmentReposit.findAllAppointmentsByStatus(AppointmentStatus.CONFIRMED, monthPeriod.firstDay(), monthPeriod.lastDay());
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -109,10 +108,8 @@ public class AppointmentService {
     }
 
     public List<AppointmentDetailsResponse> findAppointmentsCompleted(LocalDate date) {
-        LocalDate startDate = date.withDayOfMonth(1);
-        LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-
-        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsCompleted(startDate, endDate);
+        MonthPeriod monthPeriod = getMonthPeriod(date);
+        List<Appointment> appointmentList = appointmentReposit.findAllAppointmentsByStatus(AppointmentStatus.COMPLETED, monthPeriod.firstDay(), monthPeriod.lastDay());
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -124,10 +121,8 @@ public class AppointmentService {
     }
 
     public List<AppointmentDetailsResponse> findAppointmentsCanceled(LocalDate date) {
-        LocalDate startDate = date.withDayOfMonth(1);
-        LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-
-        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsCanceled(startDate, endDate);
+        MonthPeriod monthPeriod = getMonthPeriod(date);
+        List<Appointment> appointmentList = appointmentReposit.findAllAppointmentsByStatus(AppointmentStatus.CANCELED, monthPeriod.firstDay(), monthPeriod.lastDay());
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -142,7 +137,7 @@ public class AppointmentService {
 
         LocalDate tomorrowDate = LocalDate.now().plusDays(1);
 
-        List<Appointment> appointmentList = appointmentDAO.findAllAppointmentsReminds(tomorrowDate);
+        List<Appointment> appointmentList = appointmentReposit.findAllAppointmentsForReminds(tomorrowDate);
 
         return appointmentList.stream()
                 .map(appointment -> {
@@ -158,7 +153,7 @@ public class AppointmentService {
     public AppointmentDetailsResponse findAppointmentByCustomerPhone(String phone) {
         CustomerResponse customer =  customerClient.findByPhone(phone);
 
-        Appointment appointment = appointmentDAO.findAppointmentByCustomerId(customer.id()).orElseThrow(
+        Appointment appointment = appointmentReposit.findAppointmentByCustomerId(customer.id()).orElseThrow(
                 () -> new RuntimeException("Agendamento não encontrado")
 
         );
@@ -226,4 +221,9 @@ public class AppointmentService {
 
         appointmentRepository.deleteAllByCustomerId(customerId);
     }
+
+    private MonthPeriod getMonthPeriod(LocalDate date) {
+        return new MonthPeriod(date.withDayOfMonth(1), date.withDayOfMonth(date.lengthOfMonth()));
+    }
+
 }
