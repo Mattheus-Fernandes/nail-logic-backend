@@ -87,6 +87,13 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.findAppointmentByMonth(date));
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<List<AppointmentDetailsResponse>> findAllAppointmentsByName(
+            @RequestParam String name
+    ){
+        return ResponseEntity.ok(appointmentService.findAllAppointmentsByName(name));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<AppointmentDetailsResponse> updateAppointment (
             @PathVariable UUID id,
