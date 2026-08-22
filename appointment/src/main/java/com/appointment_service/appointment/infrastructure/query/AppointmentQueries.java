@@ -9,7 +9,7 @@ public class AppointmentQueries {
     public static final String FIND_ALL_APPOINTMENTS_QUERY = """
             SELECT *
             FROM appointments
-            ORDER BY appointment_date, appointment_time ASC
+            ORDER BY appointment_date DESC, appointment_time DESC
             """;
 
     public static final String FIND_APPOINTMENT_BY_ID = "Appointment.findByCustomerId";
