@@ -161,6 +161,20 @@ public class AppointmentService {
         return appointmentMapper.toDetailsResponse(appointment, customer);
     }
 
+    public List<AppointmentDetailsResponse> findAppointmentByMonth(LocalDate date) {
+        MonthPeriod monthPeriod = getMonthPeriod(date);
+
+        List<Appointment> appointmentList = appointmentReposit.filterAppointmentByMonth(monthPeriod.firstDay(), monthPeriod.lastDay());
+
+        return appointmentList.stream()
+                .map(appointment -> {
+                    CustomerResponse customer = customerClient.findById(appointment.getCustomerId());
+
+                    return appointmentMapper.toDetailsResponse(appointment, customer);
+                })
+                .toList();
+    }
+
     public AppointmentDetailsResponse updateAppointmentStatus(UUID id, AppointmentStatus status) {
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(
