@@ -62,6 +62,11 @@ import java.util.UUID;
                 name = AppointmentQueries.FILTER_APPOINTMENTS_BY_MONTH,
                 query = AppointmentQueries.FILTER_APPOINTMENTS_BY_MONTH_QUERY,
                 resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FILTER_ALL_APPOINTMENTS_BY_CUSTOMER_ID,
+                query = AppointmentQueries.FILTER_ALL_APPOINTMENTS_BY_CUSTOMER_ID_QUERY,
+                resultClass = Appointment.class
         )
 })
 public class Appointment {
