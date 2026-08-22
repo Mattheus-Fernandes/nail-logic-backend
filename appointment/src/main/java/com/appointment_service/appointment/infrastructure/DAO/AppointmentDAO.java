@@ -93,4 +93,11 @@ public class AppointmentDAO {
                 .setParameter("end_appointment_date", endAppointmentDate)
                 .getResultList();
     }
+
+    public List<Appointment> filterAppointmentByCustomerId(UUID customerId) {
+        return entityManager
+                .createNamedQuery(AppointmentQueries.FILTER_ALL_APPOINTMENTS_BY_CUSTOMER_ID, Appointment.class)
+                .setParameter("customer_id", customerId)
+                .getResultList();
+    }
 }

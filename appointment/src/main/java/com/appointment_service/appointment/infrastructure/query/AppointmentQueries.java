@@ -9,7 +9,7 @@ public class AppointmentQueries {
     public static final String FIND_ALL_APPOINTMENTS_QUERY = """
             SELECT *
             FROM appointments
-            ORDER BY appointment_date ASC, appointment_time ASC
+            ORDER BY appointment_date DESC, appointment_time DESC
             """;
 
     public static final String FIND_APPOINTMENT_BY_ID = "Appointment.findByCustomerId";
@@ -27,7 +27,7 @@ public class AppointmentQueries {
             FROM appointments
             WHERE status = 'SCHEDULED'
             AND appointment_date = :appointment_date
-            ORDER BY appointment_date, appointment_time ASC
+            ORDER BY appointment_date ASC, appointment_time ASC
             """;
 
     public static final String FIND_APPOINTMENT_BY_CUSTOMER_ID = "Appointment.findAppointmentByIdCustomer";
@@ -37,6 +37,7 @@ public class AppointmentQueries {
                             FROM appointments
                             WHERE customer_id = :customer_id
                             """;
+
     public static final String FIND_ALL_APPOINTMENTS_TODAY = "Appointment.findAllToday";
 
     public static final String FIND_ALL_APPOINTMENTS_TODAY_QUERY = """
@@ -44,7 +45,7 @@ public class AppointmentQueries {
             FROM appointments
             WHERE status = 'CONFIRMED'
             AND appointment_date = :appointment_date
-            ORDER BY appointment_date, appointment_time ASC
+            ORDER BY appointment_date, appointment_time DESC
             """;
 
     public static final String FIND_ALL_APPOINTMENTS_CONFIRMED = "Appointment.findAllConfirmed";
@@ -54,7 +55,7 @@ public class AppointmentQueries {
             FROM appointments
             WHERE status = 'CONFIRMED'
             AND appointment_date BETWEEN :start_appointment_date AND :end_appointment_date
-            ORDER BY appointment_date, appointment_time ASC
+            ORDER BY appointment_date ASC, appointment_time ASC
             """;
 
     public static final String FIND_ALL_APPOINTMENTS_COMPLETED = "Appointment.findAllCompleted";
@@ -64,7 +65,7 @@ public class AppointmentQueries {
             FROM appointments
             WHERE status = 'COMPLETED'
             AND appointment_date BETWEEN :start_appointment_date AND :end_appointment_date
-            ORDER BY appointment_date, appointment_time ASC
+            ORDER BY appointment_date ASC, appointment_time ASC
             """;
 
     public static final String FIND_ALL_APPOINTMENTS_CANCELED = "Appointment.findAllCanceled";
@@ -74,7 +75,7 @@ public class AppointmentQueries {
             FROM appointments
             WHERE status = 'CANCELED'
             AND appointment_date BETWEEN :start_appointment_date AND :end_appointment_date
-            ORDER BY appointment_date, appointment_time ASC
+            ORDER BY appointment_date ASC, appointment_time ASC
             """;
 
     public static final String FILTER_APPOINTMENTS_BY_MONTH = "Appointment.filterByMonth";
@@ -83,6 +84,15 @@ public class AppointmentQueries {
             SELECT *
             FROM appointments
             WHERE appointment_date BETWEEN :start_appointment_date AND :end_appointment_date
+            ORDER BY appointment_date ASC, appointment_time ASC
+            """;
+
+    public static final String FILTER_ALL_APPOINTMENTS_BY_CUSTOMER_ID = "Appointment.findAllAppointmentBycustomerId";
+
+    public static final String FILTER_ALL_APPOINTMENTS_BY_CUSTOMER_ID_QUERY = """
+            SELECT *
+            FROM appointments
+            WHERE customer_id = :customer_id
             ORDER BY appointment_date ASC, appointment_time ASC
             """;
 }
