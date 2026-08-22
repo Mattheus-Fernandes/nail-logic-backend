@@ -9,7 +9,7 @@ public class AppointmentQueries {
     public static final String FIND_ALL_APPOINTMENTS_QUERY = """
             SELECT *
             FROM appointments
-            ORDER BY appointment_date DESC, appointment_time DESC
+            ORDER BY appointment_date ASC, appointment_time ASC
             """;
 
     public static final String FIND_APPOINTMENT_BY_ID = "Appointment.findByCustomerId";
@@ -75,5 +75,14 @@ public class AppointmentQueries {
             WHERE status = 'CANCELED'
             AND appointment_date BETWEEN :start_appointment_date AND :end_appointment_date
             ORDER BY appointment_date, appointment_time ASC
+            """;
+
+    public static final String FILTER_APPOINTMENTS_BY_MONTH = "Appointment.filterByMonth";
+
+    public static final String FILTER_APPOINTMENTS_BY_MONTH_QUERY = """
+            SELECT *
+            FROM appointments
+            WHERE appointment_date BETWEEN :start_appointment_date AND :end_appointment_date
+            ORDER BY appointment_date ASC, appointment_time ASC
             """;
 }

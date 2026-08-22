@@ -57,6 +57,11 @@ import java.util.UUID;
                 name = AppointmentQueries.FIND_ALL_APPOINTMENTS_CANCELED,
                 query = AppointmentQueries.FIND_ALL_APPOINTMENTS_CANCELED_QUERY,
                 resultClass = Appointment.class
+        ),
+        @NamedNativeQuery(
+                name = AppointmentQueries.FILTER_APPOINTMENTS_BY_MONTH,
+                query = AppointmentQueries.FILTER_APPOINTMENTS_BY_MONTH_QUERY,
+                resultClass = Appointment.class
         )
 })
 public class Appointment {
